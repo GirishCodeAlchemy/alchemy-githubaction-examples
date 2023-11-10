@@ -1,0 +1,82 @@
+name: Update Readme Workflows
+
+# on:
+#   workflow_run:
+#     workflows: ["Your-Workflow-Name"]  # Replace "Your-Workflow-Name" with the actual name of your workflow
+#     types:
+#       - completed
+# on:
+#   push:
+#     branches:
+#       - main
+
+on:
+  workflow_run:
+    workflows:
+      - CI
+
+jobs:
+  update_readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # - name: Set up Git
+      #   run: |
+      #     git config --local user.email "action@github.com"
+      #     git config --local user.name "GitHub Action"
+
+      - name: Fetch workflow names
+        id: workflows
+        run: |
+          WORKFLOWS=$(curl -s -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/girish-devops-project/github-action/actions/workflows | \
+            jq -r '.workflows[].name')
+          echo "::set-output name=workflows::${WORKFLOWS}"
+
+      - name: Create Workflow List
+        id: create_list
+        run: |
+          WORKFLOW_LIST=$(echo "${{ steps.workflows.outputs.workflows }}" | awk '{printf "%s, ", $0}' | sed 's/, $//')
+          echo "::set-output name=workflow_list::${WORKFLOW_LIST}"
+
+      - name: Update README
+        run: |
+          WORKFLOW_LIST="Workflow names: $(echo "${{ steps.create_list.outputs.workflow_list }}")"
+          sed -i "s|<!-- Workflow Names: {{WORKFLOW_NAMES}} -->|${WORKFLOW_LIST}|g" Workflow-README.md
+
+
+      ###new
+
+      - name: Get Workflow Data
+        id: workflow_data
+        run: |
+          WORKFLOW_NAME=$(echo "${{ github.event.workflow }}" | sed 's/ /%20/g')
+          WORKFLOW_STATUS=$(echo "${{ github.event.workflow_run.conclusion }}" | tr '[:upper:]' '[:lower:]')
+          echo "::set-output name=workflow_name::${WORKFLOW_NAME}"
+          echo "::set-output name=workflow_status::${WORKFLOW_STATUS}"
+
+      - name: Update Workflows Table
+        run: |
+          sed -i "/^\| \[Latest Build Status\]/,/^$/d" new-README.md
+          sed -i "s|<!-- Add more workflows as needed -->|<!-- Add more workflows as needed -->\n|g" new-README.md
+          sed -i "s|\(<!-- Add more workflows as needed -->\)||g" new-README.md
+
+          WORKFLOW_NAME=$(echo "${{ steps.workflow_data.outputs.workflow_name }}" | sed 's/%20/ /g')
+          WORKFLOW_STATUS=$(echo "${{ steps.workflow_data.outputs.workflow_status }}")
+          BADGE="[![${WORKFLOW_NAME}](https://github.com/girish-devops-project/github-action/actions/workflows/${WORKFLOW_NAME}/badge.svg)](https://github.com/girish-devops-project/github-action/actions/workflows/${WORKFLOW_NAME})"
+          sed -i "/<!-- Add more workflows as needed -->/a \| [${WORKFLOW_NAME}](.github/workflows/${WORKFLOW_NAME}.yaml) | Description of the workflow | ${BADGE} |" new-README.md
+
+      - name: Update Latest Build Status
+        run: |
+          sed -i "s|![Latest Build Status].*|![Latest Build Status](https://github.com/girish-devops-project/github-action/actions/workflows/${{ github.event.workflow }}/badge.svg)|" new-README.md
+
+      - name: Commit and Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Update README with workflow status [skip ci]"
+          git push
