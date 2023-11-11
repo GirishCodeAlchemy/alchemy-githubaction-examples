@@ -12,8 +12,10 @@ name: Update Readme Workflows
 
 on:
   workflow_run:
-    workflows:
-      - CI
+    workflows: ["*"]
+    types:
+      - completed
+
 
 jobs:
   update_readme:
