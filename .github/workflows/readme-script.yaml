@@ -13,9 +13,11 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pyyaml
+          pip install -r requirements.txt
       - name: Run the required logic
-        run: echo $(date) > current_run.txt
+        run: |
+          echo $(date) > current_run.txt
+          python scripts/readme-update.py
       - name: Push Changes
         run: |
           git config user.name github-actions
