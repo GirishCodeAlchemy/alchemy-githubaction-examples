@@ -89,7 +89,7 @@ if __name__ == "__main__":
     repository = "github-action"
 
     # Path to the README.md file
-    readme_path = Path("README.md")
+    readme_path = Path("script-README.md")
 
     # Get all workflow names
     workflows = get_workflow_names(username, repository)

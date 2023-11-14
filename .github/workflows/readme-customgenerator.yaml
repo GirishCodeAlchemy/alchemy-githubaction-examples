@@ -1,0 +1,11 @@
+name: Use githubaction status generator to update README
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Run Githubaction Generator
+        uses: girish-devops-project/githubaction-status-generator@main
+
