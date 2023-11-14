@@ -1,4 +1,4 @@
-# github-action
+# Github-Action
 
 This repository contains amazing code and workflows. Check out the status of our GitHub Actions below:
 
