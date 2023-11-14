@@ -1,4 +1,4 @@
-name: Update Readme Workflows
+name: Update Readme Workflows using sed
 
 # on:
 #   workflow_run:
@@ -10,12 +10,19 @@ name: Update Readme Workflows
 #     branches:
 #       - main
 
+# on:
+#   workflow_run:
+#     workflows: ["*"]
+#     types:
+#       - completed
+
 on:
   workflow_run:
     workflows: ["*"]
     types:
       - completed
-
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight
 
 jobs:
   update_readme:
@@ -49,9 +56,6 @@ jobs:
           WORKFLOW_LIST="Workflow names: $(echo "${{ steps.create_list.outputs.workflow_list }}")"
           sed -i "s|<!-- Workflow Names: {{WORKFLOW_NAMES}} -->|${WORKFLOW_LIST}|g" Workflow-README.md
 
-
-      ###new
-
       - name: Get Workflow Data
         id: workflow_data
         run: |
@@ -80,5 +84,5 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
-          git commit -m "Update README with workflow status [skip ci]"
+          git diff --quiet || git commit -m "Update README with workflow status [skip ci]"
           git push
