@@ -85,7 +85,7 @@ def update_readme(readme_path, table_content):
 
 if __name__ == "__main__":
     # GitHub username and repository name
-    username = "girish-devops-project"
+    username = "GirishCodeAlchemy"
     repository = "github-action"
 
     # Path to the README.md file

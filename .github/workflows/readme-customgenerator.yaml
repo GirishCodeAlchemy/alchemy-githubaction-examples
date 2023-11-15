@@ -7,5 +7,5 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
       - name: Run Githubaction Generator
-        uses: girish-devops-project/githubaction-status-generator@main
+        uses: GirishCodeAlchemy/githubaction-status-generator@main
 

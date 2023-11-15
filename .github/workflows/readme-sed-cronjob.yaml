@@ -41,7 +41,7 @@ jobs:
         id: workflows
         run: |
           WORKFLOWS=$(curl -s -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/girish-devops-project/github-action/actions/workflows | \
+            https://api.github.com/repos/GirishCodeAlchemy/github-action/actions/workflows | \
             jq -r '.workflows[].name')
           echo "::set-output name=workflows::${WORKFLOWS}"
 
@@ -72,12 +72,12 @@ jobs:
 
           WORKFLOW_NAME=$(echo "${{ steps.workflow_data.outputs.workflow_name }}" | sed 's/%20/ /g')
           WORKFLOW_STATUS=$(echo "${{ steps.workflow_data.outputs.workflow_status }}")
-          BADGE="[![${WORKFLOW_NAME}](https://github.com/girish-devops-project/github-action/actions/workflows/${WORKFLOW_NAME}/badge.svg)](https://github.com/girish-devops-project/github-action/actions/workflows/${WORKFLOW_NAME})"
+          BADGE="[![${WORKFLOW_NAME}](https://github.com/GirishCodeAlchemy/github-action/actions/workflows/${WORKFLOW_NAME}/badge.svg)](https://github.com/GirishCodeAlchemy/github-action/actions/workflows/${WORKFLOW_NAME})"
           sed -i "/<!-- Add more workflows as needed -->/a \| [${WORKFLOW_NAME}](.github/workflows/${WORKFLOW_NAME}.yaml) | Description of the workflow | ${BADGE} |" new-README.md
 
       - name: Update Latest Build Status
         run: |
-          sed -i "s|![Latest Build Status].*|![Latest Build Status](https://github.com/girish-devops-project/github-action/actions/workflows/${{ github.event.workflow }}/badge.svg)|" new-README.md
+          sed -i "s|![Latest Build Status].*|![Latest Build Status](https://github.com/GirishCodeAlchemy/github-action/actions/workflows/${{ github.event.workflow }}/badge.svg)|" new-README.md
 
       - name: Commit and Push
         run: |

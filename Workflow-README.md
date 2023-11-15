@@ -13,10 +13,9 @@ This repository contains amazing code and workflows. Check out the status of our
 
 ## Workflows
 
-| Workflow                                | Description             | Status                                                                                                                                                                                                             |
-| --------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [First](.github/workflows/first.yaml)   | Build and test the code | [![Create first githubaction](https://github.com/girish-devops-project/github-action/actions/workflows/first.yaml/badge.svg)](https://github.com/girish-devops-project/github-action/actions/workflows/first.yaml) |
-
+| Workflow                              | Description             | Status                                                                                                                                                                                                     |
+| ------------------------------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [First](.github/workflows/first.yaml) | Build and test the code | [![Create first githubaction](https://github.com/GirishCodeAlchemy/github-action/actions/workflows/first.yaml/badge.svg)](https://github.com/GirishCodeAlchemy/github-action/actions/workflows/first.yaml) |
 
 <!-- Add more workflows as needed -->
 
